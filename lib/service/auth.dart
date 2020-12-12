@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wifi_lock/models/user.dart';
+import 'package:wifi_lock/service/database.dart';
 // import 'package:firebase_auth_web/firebase_auth_web.dart';
 
 class AuthService {
@@ -7,7 +8,7 @@ class AuthService {
 
   //this one creates an user(we defined in models) object based on FirebaseUser
   User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+    return user != null ? User(uid: user.uid, name: 'example') : null;
   }
 
   // String _uid
@@ -21,7 +22,9 @@ class AuthService {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      FirebaseUser user = await result.user;
+      FirebaseUser user = result.user;
+      // DatabaseService dbService = DatabaseService(uid: user.uid);
+      // dbService.insertNewUserData('ria', 'ria', 'ria');
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());

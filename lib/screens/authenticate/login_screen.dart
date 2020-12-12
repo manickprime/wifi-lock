@@ -16,6 +16,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
   String email, password;
+  final emailController = TextEditingController(),
+      passController = TextEditingController();
 
   bool isLoggedIn = false;
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
@@ -63,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: InputDecoration(
                 hintText: 'Enter your email',
               ),
+              controller: emailController,
             ),
             SizedBox(
               height: 10,
@@ -77,25 +80,42 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: InputDecoration(
                 hintText: 'Enter your password',
               ),
+              controller: passController,
             ),
-            FlatButton(
-              onPressed: () async {
-                print(email + " " + password);
-                try {
-                  final user = await _auth.signInWithEmailAndPassword(
-                      email: email, password: password);
-                  if (user != null) {
-                    Navigator.pushNamed(context, MainPage.id);
-                  }
-                } catch (e) {
-                  print(e);
-                }
-              },
-              child: Text(
-                'Login',
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Colors.grey,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FlatButton(
+                  onPressed: () async {
+                    print(email + " " + password);
+                    try {
+                      final user = await _auth.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      if (user != null) {
+                        Navigator.pushNamed(context, MainPage.id);
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Text(
+                    'Login',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  color: Colors.grey,
+                ),
+                FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      email = "";
+                      password = "";
+                      emailController.clear();
+                      passController.clear();
+                    });
+                  },
+                  child: Text('Clear'),
+                )
+              ],
             ),
             FlatButton(
               onPressed: () {
