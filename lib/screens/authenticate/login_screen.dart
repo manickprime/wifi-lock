@@ -56,6 +56,13 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            Text(
+              'Login Page',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             TextField(
               onChanged: (value) {
                 email = value;

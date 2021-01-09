@@ -12,11 +12,15 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.3
+#  cloud_firestore_web:
   cloud_firestore:
-  firebase_auth: ^0.16.1
+#  firebase_auth_web:
+  firebase_auth:
   google_sign_in: ^4.5.1
+#  firebase_core_web:
   firebase_core:
   provider:
+
 
 dev_dependencies:
   flutter_test:

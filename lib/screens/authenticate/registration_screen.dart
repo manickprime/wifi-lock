@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi_lock/models/user.dart';
@@ -23,7 +24,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final AuthService _authService = AuthService();
   final fnameController = TextEditingController(),
       mnameController = TextEditingController(),
-      lnameController = TextEditingController();
+      lnameController = TextEditingController(),
+      usernameController = TextEditingController(),
+      passwordController = TextEditingController(),
+      reTypePasswordController = TextEditingController(),
+      emailController = TextEditingController(),
+      altEmailController = TextEditingController(),
+      phoneNumController = TextEditingController(),
+      altPhoneNumController = TextEditingController(),
+      doorNoController = TextEditingController(),
+      streetNumController = TextEditingController(),
+      localityController = TextEditingController(),
+      cityController = TextEditingController(),
+      districtController = TextEditingController(),
+      stateController = TextEditingController(),
+      pinController = TextEditingController(),
+      aadharController = TextEditingController(),
+      licenseController = TextEditingController(),
+      panController = TextEditingController();
   String email,
       password,
       retypePassword,
@@ -66,6 +84,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     print("im in registration screen");
+
+    final firestoreInstance = Firestore.instance;
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.grey,
@@ -90,17 +111,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             onPressed: () {
                               widget.toggleView();
                             },
-                            child: Text('Login'),
+                            child: Text('Already have an account? Log in'),
                           ),
                           Text(
                             'Registration form',
                             style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 25,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text('Name'),
+                          // SizedBox(
+                          //   height: 10,
+                          // ),
+                          Text(
+                            'Name',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           TextFormField(
+                            controller: fnameController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (val) =>
@@ -113,6 +144,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: mnameController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             onChanged: (value) {
@@ -123,6 +155,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: lnameController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (val) =>
@@ -137,7 +170,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text('Gender'),
+                          Text(
+                            'Gender',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           ListTile(
                             title: Text('Male'),
                             leading: Radio(
@@ -180,7 +219,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                             dense: true,
                           ),
-                          Text('DOB'),
+                          Text(
+                            'DOB',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           Text("${selectedDate.toLocal()}".split(' ')[0]),
                           RaisedButton(
                             onPressed: () => _selectDate(context),
@@ -188,6 +233,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Text('Username'),
                           TextFormField(
+                            controller: usernameController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (val) =>
@@ -201,6 +247,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Text('Password'),
                           TextFormField(
+                            controller: passwordController,
                             obscureText: true,
                             keyboardType: TextInputType.visiblePassword,
                             textAlign: TextAlign.center,
@@ -216,6 +263,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Text('Re-type Password'),
                           TextFormField(
+                            controller: reTypePasswordController,
                             obscureText: true,
                             keyboardType: TextInputType.visiblePassword,
                             textAlign: TextAlign.center,
@@ -231,6 +279,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Text('Email'),
                           TextFormField(
+                            controller: emailController,
                             keyboardType: TextInputType.emailAddress,
                             textAlign: TextAlign.center,
                             validator: (val) =>
@@ -244,6 +293,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Text('Alternative email'),
                           TextFormField(
+                            controller: altEmailController,
                             keyboardType: TextInputType.emailAddress,
                             textAlign: TextAlign.center,
                             // validator: (val) =>
@@ -260,6 +310,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Text('Phone No'),
                           TextFormField(
+                            controller: phoneNumController,
                             keyboardType: TextInputType.phone,
                             textAlign: TextAlign.center,
                             // validator: (val) =>
@@ -273,6 +324,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Text('Alternate Phone No'),
                           TextFormField(
+                            controller: altPhoneNumController,
                             keyboardType: TextInputType.phone,
                             textAlign: TextAlign.center,
                             // validator: (val) =>
@@ -284,8 +336,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               hintText: 'Enter alternate phone No',
                             ),
                           ),
-                          Text('Address'),
+                          Text(
+                            'Address',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           TextFormField(
+                            controller: doorNoController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             // validator: (val) =>
@@ -298,6 +357,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: streetNumController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (val) => val.isEmpty
@@ -311,6 +371,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: localityController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             // validator: (val) =>
@@ -324,7 +385,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           TextFormField(
                             keyboardType: TextInputType.text,
-                            controller: msgController,
+                            controller: cityController,
                             textAlign: TextAlign.center,
                             validator: (val) =>
                                 val.isEmpty ? 'Please enter your city' : null,
@@ -336,6 +397,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: districtController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             // validator: (val) =>
@@ -348,6 +410,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: stateController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (val) =>
@@ -360,6 +423,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: pinController,
                             keyboardType: TextInputType.number,
                             textAlign: TextAlign.center,
                             validator: (val) => val.isEmpty
@@ -372,8 +436,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               hintText: 'Enter your PIN code',
                             ),
                           ),
-                          Text('Identification Details'),
+                          Text(
+                            'Identification Details',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           TextFormField(
+                            controller: aadharController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (val) => val.isEmpty
@@ -387,6 +458,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: licenseController,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             // validator: (val) =>
@@ -399,6 +471,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: panController,
                             keyboardType: TextInputType.number,
                             textAlign: TextAlign.center,
                             validator: (val) =>
@@ -442,7 +515,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                                 selectedDate = DateTime.now();
                               });
-                              msgController.clear();
+                              fnameController.clear();
+                              mnameController.clear();
+                              lnameController.clear();
+                              usernameController.clear();
+                              passwordController.clear();
+                              reTypePasswordController.clear();
+                              emailController.clear();
+                              altEmailController.clear();
+                              phoneNumController.clear();
+                              altPhoneNumController.clear();
+                              doorNoController.clear();
+                              streetNumController.clear();
+                              localityController.clear();
+                              cityController.clear();
+                              districtController.clear();
+                              stateController.clear();
+                              pinController.clear();
+                              aadharController.clear();
+                              licenseController.clear();
+                              panController.clear();
                               // print(city);
                             },
                           ),
@@ -494,6 +586,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 if (newUser != null) {
                                   setState(() {
                                     showProgress = false;
+                                  });
+                                  firestoreInstance
+                                      .collection(newUser.uid)
+                                      .add({
+                                    'flag': 1,
                                   });
                                   Navigator.pushNamed(context, MainPage.id);
                                 }
